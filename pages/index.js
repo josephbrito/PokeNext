@@ -36,6 +36,7 @@ export default function Home({ pokemons }) {
           alt="PokeNext"
         />
       </div>
+
       <div className={styles.pokemon_container}>
         {pokemons.map((pokemon) => (
           <Card key={pokemon.id} pokemon={pokemon} />
