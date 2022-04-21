@@ -1,6 +1,7 @@
-import Image from "next/image";
-
 import PokemonId from "../../components/Pokemon";
+import { useRouter } from "next/router";
+import ReactLoading from "react-loading";
+import styled from "../../styles/Load.module.css";
 
 export async function getStaticPaths() {
   const maxPokemons = 100;
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
   });
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -26,6 +27,7 @@ export async function getStaticProps(context) {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
 
   const data = await res.json();
+
   return {
     props: {
       pokemon: data,
@@ -34,5 +36,14 @@ export async function getStaticProps(context) {
 }
 
 export default function Pokemon({ pokemon }) {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return (
+      <div className={styled.load_container}>
+        <ReactLoading className={styled.load} type="spin" color="black" />
+      </div>
+    );
+  }
   return <PokemonId pokemon={pokemon} />;
 }
